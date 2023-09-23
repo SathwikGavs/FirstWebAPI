@@ -1,0 +1,100 @@
+﻿//namespace FirstWebAPI.Models
+//{
+//    public class RepositoryEmployee
+//    {
+//        private NorthwindContext _context;
+//        public RepositoryEmployee(NorthwindContext context)
+//        {
+//            _context = context;
+//        }
+//        public List<Employee> AllEmployees()
+//        {
+//            return _context.Employees.ToList();
+//        }
+//    }
+//}
+
+
+//using FirstWebAPI.Models;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+
+namespace FirstWebAPI.Models
+{
+    public class RepositoryEmployee
+    {
+        private NorthwindContext _context;
+        public RepositoryEmployee(NorthwindContext context)
+        {
+            _context = context;
+        }
+        public List<Employee> AllEmployees()
+        {
+            return _context.Employees.ToList();
+        }
+        public Employee FindEmpoyeeById(int id)
+        {
+            return _context.Employees.Find(id);
+        }
+        public int AddEmployee(Employee newEmployee)
+        {
+            _context.Employees.Add(newEmployee);
+            return _context.SaveChanges();
+        }
+        public int UpdateEmployee(Employee emp)
+        {
+            _context.Employees.Update(emp);
+            return _context.SaveChanges();
+        }
+        public int DeleteEmployee(int id)
+        {
+            Employee emp = _context.Employees.Find(id);
+            _context.Employees.Remove(emp);
+            return _context.SaveChanges();
+        }
+        public IEnumerable<EmpViewModel> Lister(List<Employee> employees)
+        {
+            List<EmpViewModel> empList = (
+                from emp in employees
+                select new EmpViewModel()
+                {
+                    EmployeeId = emp.EmployeeId,
+                    FirstName = emp.FirstName,
+                    LastName = emp.LastName,
+                    BirthDate = emp.BirthDate,
+                    HireDate = emp.HireDate,
+                    Title = emp.Title,
+                    City = emp.City,
+                    ReportsTo = emp.ReportsTo
+                }
+                ).ToList();
+            return empList;
+        }
+        public EmpViewModel Viewer(Employee employee)
+        {
+            EmpViewModel employeeView = new EmpViewModel();
+            employeeView.EmployeeId = employee.EmployeeId;
+            employeeView.FirstName = employee.FirstName;
+            employeeView.LastName = employee.LastName;
+            employeeView.BirthDate = employee.BirthDate;
+            employeeView.HireDate = employee.HireDate;
+            employeeView.Title = employee.Title;
+            employeeView.City = employee.City;
+            employeeView.ReportsTo = employee.ReportsTo;
+            return employeeView;
+        }
+        public Employee ViewToEmp(EmpViewModel newEmployeeView)
+        {
+            Employee newEmployee = new Employee();
+            newEmployee.FirstName = newEmployeeView.FirstName;
+            newEmployee.LastName = newEmployeeView.LastName;
+            newEmployee.BirthDate = newEmployeeView.BirthDate;
+            newEmployee.HireDate = newEmployeeView.HireDate;
+            newEmployee.Title = newEmployeeView.Title;
+            newEmployee.City = newEmployeeView.City;
+            newEmployee.ReportsTo = newEmployeeView.ReportsTo;
+            return newEmployee;
+        }
+    }
+}
